@@ -1,5 +1,6 @@
 // pages/Home/index.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './home.css';
 // Import images
 import picture1 from '../../assets/image/picture1.png';
@@ -13,10 +14,42 @@ import bookmarkIcon from '../../assets/image/bookmark.png';
 import bookmarkClickedIcon from '../../assets/image/bookmark_clicked.png';
 
 const Home = () => {
+  const [user, setUser] = useState(null); // Store user data
   const [likedPosts, setLikedPosts] = useState({});
   const [bookmarkedPosts, setBookmarkedPosts] = useState({});
   const [selectedPost, setSelectedPost] = useState(null);
   const [showComments, setShowComments] = useState(false);
+
+  const [error, setError] = useState(null);
+
+  // Fetch user data from backend
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken'); // Retrieve the token
+        if (!token) {
+          throw new Error('Unauthorized. Please log in.');
+        }
+
+        const response = await axios.get('/get-user', {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass token in the header
+          },
+        });
+
+        if (response.data.error) {
+          throw new Error(response.data.message);
+        }
+
+        setUser(response.data.user); // Save user data to state
+      } catch (error) {
+        console.error('Error fetching user data:', error.message);
+        setError(error.message || 'Failed to fetch user data.');
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   // Sample comments data
   const sampleComments = [
@@ -73,9 +106,18 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      {error && <div className="error-banner">{error}</div>}
+
+      {/* {user ? (
+        <header className="user-header">
+          <h1>Welcome, {user.fullName}!</h1>
+        </header>
+      ) : (
+        <p>Loading user data...</p>
+      )} */}
+
       {postsData.map((post, index) => (
         <div key={index} className="post-card">
-          {/* Previous post content remains the same */}
           <div className="post-header">
             <div className="post-user-info">
               <img 
@@ -136,7 +178,6 @@ const Home = () => {
         </div>
       ))}
 
-      {/* Comments Modal */}
       {showComments && selectedPost && (
         <div className="comments-modal-overlay" onClick={() => setShowComments(false)}>
           <div className="comments-modal" onClick={e => e.stopPropagation()}>

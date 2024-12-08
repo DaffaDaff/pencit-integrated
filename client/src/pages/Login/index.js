@@ -1,10 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import './login.css';
 import logoAuth from '../../assets/image/logo_auth.png';
 import cloudAuth1 from '../../assets/image/cloud auth 1.png';
 import cloudAuth2 from '../../assets/image/cloud auth 2.png';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+    try {
+      const response = await axios.post('/login', { email, password });
+      
+      if (response.data.error) {
+        setErrorMessage(response.data.message);
+      } else {
+        // Handle successful login
+        const { accessToken, user } = response.data;
+        localStorage.setItem('accessToken', accessToken);
+        //alert(`Welcome back, ${user.fullName}!`);
+        window.location.href = '/';
+      }
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || 'Something went wrong. Please try again.');
+    }
+  };
+
+
+
   return (
     <div className="login-container">
       <img src={cloudAuth1} alt="Cloud 1" className="cloud cloud-1" />
@@ -17,16 +44,29 @@ const Login = () => {
         </div>
         
         <div className="login-card">
-          <div className="login-form">
+          <form className="login-form" onSubmit={handleLogin}>
             <div className="login-logo">
               <img src={logoAuth} alt="Pencit Logo" />
             </div>
             <h3 className="login-heading">Login</h3>
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <button className="login-button">Masuk</button>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <input 
+              type="email" 
+              placeholder="Email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+            />
+            <input 
+              type="password" 
+              placeholder="Password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+            <button className="login-button" type="submit">Masuk</button>
             <p className="register-link">Belum punya akun? <a href="/register">Daftar</a></p>
-          </div>
+          </form>
         </div>
       </div>
     </div>

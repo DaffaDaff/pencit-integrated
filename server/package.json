@@ -1,5 +1,5 @@
 {
-  "name": "pencit_backend",
+  "name": "pencit-server",
   "version": "1.0.0",
   "description": "",
   "main": "Express.js",
