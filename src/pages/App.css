@@ -1,0 +1,85 @@
+/* App.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #fafafa;
+}
+
+.App {
+  min-height: 100vh;
+}
+
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh; 
+  overflow: hidden;
+}
+
+.navbar {
+  width: 240px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: white;
+  border-right: 1px solid #dbdbdb;
+  z-index: 1000;
+}
+
+.main-content {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto; /*scrollable*/
+  background: #fafafa;
+}
+
+.feed-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 0 0;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    width: 60px;
+    padding: 20px 10px;
+  }
+
+  .main-content {
+    margin-left: 60px;
+  }
+
+  .feed-container {
+    padding: 0 10px;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}

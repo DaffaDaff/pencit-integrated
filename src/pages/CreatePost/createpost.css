@@ -1,0 +1,153 @@
+.create-post-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #fafafa;
+    display: flex;
+    justify-content: center;
+    padding: 60px;  
+  }
+  
+  .create-post-card {
+    background: white;
+    border-radius: 15px; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;  
+    padding: 45px; 
+  }
+  
+  .create-post-card h2 {
+    text-align: center;
+    margin-bottom: 45px; 
+    color: #262626;
+    font-size: 36px;  
+  }
+  
+  .create-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .upload-section {
+    border: 3px dashed #dbdbdb;  
+    border-radius: 15px;  
+    min-height: 450px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  .upload-placeholder {
+    text-align: center;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .upload-label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; 
+    color: #0095f6;
+    font-size: 21px;  
+  }
+  
+  .upload-icon {
+    width: 72px; 
+    height: 72px;  
+    object-fit: contain;
+  }
+  
+  .image-preview-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-height: 600px;  
+  }
+  
+  .remove-image {
+    position: absolute;
+    top: 15px; 
+    right: 15px;  
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 45px; 
+    height: 45px; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+  }
+  
+  .caption-section {
+    width: 100%;
+  }
+  
+  .caption-input {
+    width: 100%;
+    min-height: 150px; 
+    padding: 18px;
+    border: 1.5px solid #dbdbdb;  
+    border-radius: 6px;  
+    resize: vertical;
+    font-size: 21px;  
+    line-height: 1.5;
+  }
+  
+  .caption-input::placeholder {
+    font-size: 21px;  
+  }
+  
+  .caption-input:focus {
+    outline: none;
+    border-color: #8e8e8e;
+  }
+  
+  .share-button {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 18px;  
+    font-weight: 600;
+    font-size: 21px;  
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .share-button:hover {
+    background-color: #0081d6;
+  }
+  
+  .share-button:disabled {
+    background-color: #b2dffc;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 960px) {  
+    .create-post-container {
+      padding: 30px; 
+    }
+  
+    .create-post-card {
+      padding: 30px;
+    }
+  
+    .upload-section {
+      min-height: 300px; 
+    }
+  }

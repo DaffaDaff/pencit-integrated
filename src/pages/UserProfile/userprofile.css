@@ -1,0 +1,171 @@
+.userprofile {
+  background-color: #f0f0f0;
+  background-size: auto;
+  height: 100vh;
+}
+
+.padding-profile {
+  padding-top: 10%;
+  padding-left:10%;
+  padding-right: 10%;
+  padding-bottom: 10%;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+
+.profile-nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile-nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 100px; /* Jarak antar tab */
+}
+
+.profile-nav ul li {
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #333;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius:  10px 10px 0px 0px;/* Untuk efek rounded */
+  transition: all 0.3s ease;
+}
+
+.profile-nav ul li:hover {
+  background-color: #1d9bf0; /* Warna hover biru muda */
+}
+
+.profile-nav ul li.active {
+  background-color: white; /* Warna biru aktif */
+  color: #1d9bf0; /* Teks putih untuk tab aktif */
+  font-weight: 500;
+}
+
+
+
+
+
+/*xx*/
+
+.profile-header {
+  display: flex;
+  align-items:center;
+  margin-top: 50px;
+  margin-left: -500px;
+  margin-bottom: 50px;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+  object-fit: cover;
+  background-color: #1d9bf0;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+  font-family: "Lexend Deca", sans-serif;
+}
+
+.profile-info p {
+  margin: 5px 0;
+  color: black;
+}
+
+.count  {
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.tagline {
+  color: black;
+  font-weight: 400;
+}
+
+/* userprofile.css */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.post-thumbnail {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* Membuat aspect ratio 1:1 */
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.post-thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-thumbnail:hover img {
+  transform: scale(1.05);
+}
+
+.padding-profile {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.posts-section {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.post {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.post:hover {
+  transform: scale(1.05);
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
