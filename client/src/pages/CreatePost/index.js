@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import './createpost.css';
-import upload from '../../assets/image/upload.png';
+import React, { useState } from "react";
+import "./createpost.css";
+import upload from "../../assets/image/upload.png";
 
 const CreatePost = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [caption, setCaption] = useState('');
+  const [caption, setCaption] = useState("");
+  const [title, setTitle] = useState("");
+  const [story, setStory] = useState("");
+  const [visitedLocation, setVisitedLocation] = useState("");
+  const [visitedDate, setVisitedDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -16,18 +21,71 @@ const CreatePost = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle post submission here
-    console.log('Image:', selectedImage);
-    console.log('Caption:', caption);
+    setIsLoading(true);
+
+    try {
+      // Step 1: Upload the image
+      const token = localStorage.getItem('accessToken');
+      const formData = new FormData();
+      formData.append("image", selectedImage);
+
+      const imageUploadResponse = await fetch("/image-upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const imageUploadData = await imageUploadResponse.json();
+
+      if (!imageUploadResponse.ok) {
+        throw new Error(imageUploadData.message || "Failed to upload image.");
+      }
+
+      const imageUrl = imageUploadData.imageUrl;
+
+      // Step 2: Submit the caption
+      const captionResponse = await fetch("/caption", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title,
+          story,
+          visitedLocation,
+          visitedDate,
+          imageUrl,
+        }),
+      });
+
+      const captionData = await captionResponse.json();
+
+      if (!captionResponse.ok) {
+        throw new Error(captionData.message || "Failed to create caption.");
+      }
+
+      alert("Post created successfully!");
+      setSelectedImage(null);
+      setPreviewUrl(null);
+      setCaption("");
+      setTitle("");
+      setStory("");
+      setVisitedLocation("");
+      setVisitedDate("");
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="create-post-container">
       <div className="create-post-card">
         <h2>Create New Post</h2>
-        
+
         <form onSubmit={handleSubmit} className="create-post-form">
           <div className="upload-section">
             {!previewUrl ? (
@@ -40,19 +98,15 @@ const CreatePost = () => {
                   className="file-input"
                 />
                 <label htmlFor="image-upload" className="upload-label">
-                  <img 
-                    src={upload} 
-                    alt="Upload" 
-                    className="upload-icon"
-                  />
+                  <img src={upload} alt="Upload" className="upload-icon" />
                   <span>Upload Image</span>
                 </label>
               </div>
             ) : (
               <div className="image-preview-container">
                 <img src={previewUrl} alt="Preview" className="image-preview" />
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="remove-image"
                   onClick={() => {
                     setPreviewUrl(null);
@@ -65,17 +119,41 @@ const CreatePost = () => {
             )}
           </div>
 
-          <div className="caption-section">
-            <textarea
-              placeholder="Write a caption..."
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              className="caption-input"
+          <div className="form-section">
+            <input
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="input-field"
+            />
+            <input
+              placeholder="Write your story..."
+              value={story}
+              onChange={(e) => setStory(e.target.value)}
+              required
+              className="input-field"
+            />
+            <input
+              type="text"
+              placeholder="Visited Location"
+              value={visitedLocation}
+              onChange={(e) => setVisitedLocation(e.target.value)}
+              required
+              className="input-field"
+            />
+            <input
+              type="date"
+              value={visitedDate}
+              onChange={(e) => setVisitedDate(e.target.value)}
+              required
+              className="input-field"
             />
           </div>
 
-          <button type="submit" className="share-button">
-            Share
+          <button type="submit" className="share-button" disabled={isLoading}>
+            {isLoading ? "Sharing..." : "Share"}
           </button>
         </form>
       </div>
