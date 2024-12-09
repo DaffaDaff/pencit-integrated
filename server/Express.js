@@ -60,7 +60,7 @@ const CaptionSchema = new mongoose.Schema({
   title: { type: String, required: true },
   story: { type: String, required: true },
   visitedLocation: { type: String, required: true },
-  imageUrl: { type: String, required: true },
+  imageId: { type: String, required: true },
   visitedDate: { type: Date, required: true }
 });
 const Caption = mongoose.model('Caption', CaptionSchema);
@@ -212,10 +212,10 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 
 app.post("/caption", authenticateToken, async (req, res) => {
   try {
-    const { title, story, visitedLocation, imageUrl, visitedDate } = req.body;
+    const { title, story, visitedLocation, imageId, visitedDate } = req.body;
     const { userId } = req.user;
 
-    if (!title || !story || !visitedLocation || !imageUrl || !visitedDate) {
+    if (!title || !story || !visitedLocation || !imageId || !visitedDate) {
       return res.status(400).json({ 
         error: true, 
         message: "All fields are required"
@@ -227,7 +227,7 @@ app.post("/caption", authenticateToken, async (req, res) => {
       title,
       story,
       visitedLocation,
-      imageUrl,
+      imageId,
       visitedDate
     });
 
@@ -259,17 +259,38 @@ app.get("/get-caption", authenticateToken, async (req, res) => {
   }
 });
 
-app.post("/image-upload", upload.single("image"), async (req, res) => {
+app.post("/image-upload", upload.single("image"), (req, res) => {
   try {
-    if(!req.file) {
-      return res.status(400).json({error: true, message: "No image uploaded"});
+    if (!req.file) {
+      return res.status(400).json({ error: true, message: "No image uploaded" });
     }
-    const imageUrl = `https://localhost:8000//uploads/${req.file.filename}`;
 
-    res.status(201).json({ imageUrl });
+    const imageId = `${req.file.filename}`;
+    res.status(201).json({ imageId });
   } catch (error) {
-    res.status(500).json({error: true, message: error.message});
+    res.status(500).json({ error: true, message: error.message });
   }
+});
+
+app.get("/image/:filename", (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, 'uploads', filename);
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      // If file not found or error occurs
+      if (err.code === 'ENOENT') {
+        return res.status(404).json({ 
+          error: true, 
+          message: "Image not found" 
+        });
+      }
+      // For other types of errors
+      return res.status(500).json({ 
+        error: true, 
+        message: "Error retrieving image" 
+      });
+    }
+  });
 });
 
 // Health check

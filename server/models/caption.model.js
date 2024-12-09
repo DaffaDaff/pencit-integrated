@@ -8,7 +8,7 @@ const CaptionSchema = new Schema ({
     isFavourite: { type: Boolean, default: false},
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true},
     createdOn: { type: Date, default: Date.now},
-    imageUrl: { type: String, required: true},
+    imageId: { type: String, required: true},
     visitedDate: { type: Date, required: true},
 
 });

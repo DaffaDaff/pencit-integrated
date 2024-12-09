@@ -16,8 +16,8 @@ const CreatePost = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedImage(file);
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewUrl(imageUrl);
+      const imageId = URL.createObjectURL(file);
+      setPreviewUrl(imageId);
     }
   };
 
@@ -42,7 +42,7 @@ const CreatePost = () => {
         throw new Error(imageUploadData.message || "Failed to upload image.");
       }
 
-      const imageUrl = imageUploadData.imageUrl;
+      const imageId = imageUploadData.imageId;
 
       // Step 2: Submit the caption
       const captionResponse = await fetch("/caption", {
@@ -56,7 +56,7 @@ const CreatePost = () => {
           story,
           visitedLocation,
           visitedDate,
-          imageUrl,
+          imageId,
         }),
       });
 
