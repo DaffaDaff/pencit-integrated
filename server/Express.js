@@ -80,10 +80,6 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Routes
-app.get("/test", (req, res) =>{
-  res.json({"test" : "hellloWorld"})
-})
-
 app.post("/create-account", async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
