@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     setErrorMessage('');
     try {
-      const response = await axios.post('/login', { email, password });
+      const response = await axios.post('http://localhost:8000/login', { email, password });
       
       if (response.data.error) {
         setErrorMessage(response.data.message);

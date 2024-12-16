@@ -20,7 +20,7 @@ const Register = () => {
     setSuccess('');
     
     try {
-      const response = await fetch('/create-account', {
+      const response = await fetch('http://localhost:8000/create-account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

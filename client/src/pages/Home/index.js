@@ -26,7 +26,7 @@ const Home = () => {
           throw new Error('Unauthorized. Please log in.');
         }
   
-        const response = await axios.get('/get-caption', {
+        const response = await axios.get('http://localhost:8000/get-caption', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
