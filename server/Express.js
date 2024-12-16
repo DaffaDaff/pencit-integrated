@@ -10,6 +10,8 @@ const path = require("path");
 // Express app setup
 const app = express();
 
+const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017/pencit_db";
+
 // Middleware
 app.use(express.json());
 app.use(cors({ 
@@ -33,14 +35,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  ssl: true,
-  retryWrites: true,
-  serverSelectionTimeoutMS: 5000,
-  connectTimeoutMS: 10000
-}).then(() => {
+mongoose.connect(mongoURI
+).then(() => {
   console.log('Connected to MongoDB');
 }).catch((error) => {
   console.error('MongoDB connection error:', error);
@@ -126,6 +122,21 @@ app.post("/create-account", async (req, res) => {
     return res.status(500).json({
       error: true,
       message: "An error occurred during registration"
+    });
+  }
+});
+
+app.post("/logout", (req, res) => {
+  try {
+    return res.json({
+      error: false,
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error('Logout error details:', error);
+    return res.status(500).json({
+      error: true,
+      message: "An error occurred during logout",
     });
   }
 });

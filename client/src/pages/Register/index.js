@@ -35,7 +35,8 @@ const Register = () => {
         setError(data.message || 'Registration failed.');
       }
     } catch (err) {
-      setError('An unexpected error occurred.');
+      console.error('Error: ', error.message);
+      setError(error.message || 'Unexpected Error');
     }
   };
 
