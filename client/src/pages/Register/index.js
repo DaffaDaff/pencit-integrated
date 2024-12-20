@@ -20,7 +20,7 @@ const Register = () => {
     setSuccess('');
     
     try {
-      const response = await fetch('http://localhost:8000/create-account', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/create-account`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ const Register = () => {
 
       const data = await response.json();
       if (response.ok) {
-        window.location.href = '/';
+        window.location.href = '/login';
       } else {
         setError(data.message || 'Registration failed.');
       }

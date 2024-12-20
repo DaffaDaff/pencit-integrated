@@ -31,7 +31,7 @@ const CreatePost = () => {
       const formData = new FormData();
       formData.append("image", selectedImage);
 
-      const imageUploadResponse = await fetch("http://localhost:8000/image-upload", {
+      const imageUploadResponse = await fetch(`${process.env.REACT_APP_API_URL}/image-upload`, {
         method: "POST",
         body: formData,
       });
@@ -45,7 +45,7 @@ const CreatePost = () => {
       const imageId = imageUploadData.imageId;
 
       // Step 2: Submit the caption
-      const captionResponse = await fetch("http://localhost:8000/caption", {
+      const captionResponse = await fetch(`${process.env.REACT_APP_API_URL}/caption`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

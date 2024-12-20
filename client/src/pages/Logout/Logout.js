@@ -5,7 +5,7 @@ const Logout = () => {
     const logout = async () => {
       try {
         // Call the backend logout API (if necessary)
-        const response = await fetch("http://localhost:8000/logout", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/logout`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

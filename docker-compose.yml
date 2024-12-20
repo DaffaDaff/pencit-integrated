@@ -4,32 +4,33 @@ services:
   backend:
     build:
       context: ./server
-    container_name: backend
-    ports:
-      - "8000:8000"
+    container_name: kelompok-2_backend
     environment:
-      - MONGO_URI=mongodb://mongo:27017/pencit_db
+      - MONGO_URI=mongodb://kelompok-2_mongo-db:27017/pencit_db
+      - HOST_URL=http://kelompok-2_frontend:5011
     depends_on:
       - mongo
+    ports:
+      - "8000:8000"
     networks:
       - app-network
 
   mongo:
-    image: mongo:6
-    container_name: mongo-db
-    ports:
-      - "27017:27017"
+    image: mongo:4
+    container_name: kelompok-2_mongo-db
     volumes:
-      - mongo-data:/data/db
+      - ./data/db:/data/db
     networks:
       - app-network
 
   frontend:
     build:
       context: ./client
-    container_name: frontend
+    container_name: kelompok-2_frontend
     ports:
-      - "80:80"
+      - "5011:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
     depends_on:
       - backend
     networks:

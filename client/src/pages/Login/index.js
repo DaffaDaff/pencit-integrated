@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     setErrorMessage('');
     try {
-      const response = await axios.post('http://localhost:8000/login', { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
       
       if (response.data.error) {
         setErrorMessage(response.data.message);

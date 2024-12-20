@@ -19,6 +19,11 @@ const Home = () => {
   const [error, setError] = useState(null); // Store error messages
 
   useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      window.location.href = '/login';
+    }
+
     const fetchCaptions = async () => {
       try {
         const token = localStorage.getItem('accessToken');
@@ -26,7 +31,7 @@ const Home = () => {
           throw new Error('Unauthorized. Please log in.');
         }
   
-        const response = await axios.get('http://localhost:8000/get-caption', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/get-caption`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -39,7 +44,7 @@ const Home = () => {
         // Map the posts to include the full image URL
         const updatedStories = response.data.stories.map((story) => ({
           ...story,
-          imageId: `http://localhost:8000/image/${story.imageId}`,
+          imageId: `${process.env.REACT_APP_API_URL}/image/${story.imageId}`,
         }));
   
         setPostsData(updatedStories);

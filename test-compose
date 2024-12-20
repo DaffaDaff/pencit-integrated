@@ -1,0 +1,40 @@
+services:
+  frontend:
+    image: 10.3.142.201:5000/5024211005-pencit_frontend:v1
+    container_name: kelompok-2_frontend
+    ports:
+      - "5011:80"
+    environment:
+      - SERVER_URI=https://kelompok-2_backend:5011
+    depends_on:
+      - backend
+    networks:
+      - pencit-network
+  backend:
+    image: 10.3.142.201:5000/5024211005-pencit_backend:v1
+    container_name: kelompok-2_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=mongodb://kelompok-2_mongo-db:27017/pencit_db
+      - HOST_URI=https://lai24b-k2.tekomits.my.id/
+    depends_on:
+      - mongo
+    networks:
+      - pencit-network
+  mongo:
+    image: mongo:4.4
+    container_name: kelompok-2_mongo-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - pencit-network
+
+volumes:
+  mongo-data:
+
+networks:
+  pencit-network:
+    driver: bridge

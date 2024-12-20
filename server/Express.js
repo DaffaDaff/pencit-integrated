@@ -5,7 +5,9 @@ const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
+const sharp = require("sharp");
 const path = require("path");
+const fs = require("fs");
 
 // Express app setup
 const app = express();
@@ -16,8 +18,13 @@ const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017/pencit_db";
 app.use(express.json());
 app.use(cors({ 
   origin:[
-    'https://linkddeployfrontendfrontend-vercel-domain.vercel.app', 
-    'http://localhost:3000'
+    'http://localhost:5011',
+    'https://localhost:5011',
+    'http://localhost',
+    'https://localhost',
+    'https://lai24b-k2.tekomits.my.id/',
+    'https://lai24b-k2.tekomits.my.id',
+    process.env.HOST_URL
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -270,14 +277,54 @@ app.get("/get-caption", authenticateToken, async (req, res) => {
   }
 });
 
-app.post("/image-upload", upload.single("image"), (req, res) => {
+async function compressToFileSize(inputPath, outputPath, targetSizeKB) {
+  let quality = 80; // Start with an initial quality
+  let compressedBuffer;
+
+  while (quality > 10) { // Set a lower limit for quality
+    // Compress image with current quality
+    compressedBuffer = await sharp(inputPath)
+      .jpeg({ quality }) // Adjust quality
+      .toBuffer();
+
+    // Check if file size meets the target
+    const sizeInKB = compressedBuffer.length / 1024; // Convert bytes to KB
+    if (sizeInKB <= targetSizeKB) {
+      break;
+    }
+
+    // Reduce quality for further compression
+    quality -= 5;
+  }
+
+  // Save compressed image to output path
+  await sharp(compressedBuffer).toFile(outputPath);
+  return compressedBuffer.length / 1024; // Return final size in KB
+}
+
+// POST route for image upload with size targeting
+app.post("/image-upload", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: true, message: "No image uploaded" });
     }
 
-    const imageId = `${req.file.filename}`;
-    res.status(201).json({ imageId });
+    const inputPath = req.file.path;
+    const compressedFilename = `compressed-${req.file.filename}`;
+    const outputPath = path.join(req.file.destination, compressedFilename);
+    const targetSizeKB = 200; // Target size in KB
+
+    // Compress image to target size
+    const finalSizeKB = await compressToFileSize(inputPath, outputPath, targetSizeKB);
+
+    // Optional: Delete original file to save space
+    fs.unlinkSync(inputPath);
+
+    res.status(201).json({
+      imageId: compressedFilename,
+      sizeKB: finalSizeKB.toFixed(2),
+      message: "Image compressed successfully",
+    });
   } catch (error) {
     res.status(500).json({ error: true, message: error.message });
   }
